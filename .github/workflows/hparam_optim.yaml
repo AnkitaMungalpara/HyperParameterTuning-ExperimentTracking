@@ -72,9 +72,6 @@ jobs:
         run: |
           echo "## Hyperparameter Optimization Results" >> report.md
           
-          echo "### Results Table" >> report.md
-          cat results_table.md >> report.md
-          
           echo "### Combined Metrics Plot" >> report.md
           echo "![Combined Metrics Plot](./combined_metrics_plot.png)" >> report.md
 
