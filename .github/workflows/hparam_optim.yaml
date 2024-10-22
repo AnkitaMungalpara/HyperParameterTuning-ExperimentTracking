@@ -23,10 +23,6 @@ jobs:
       - name: Set up Python 3.12
         run: uv python install 3.12
 
-      - name: Install CML
-        run: |
-          uv run pip install -U dvc[cml]  # Install DVC with CML support
-
       - name: Install dependencies
         env:
           UV_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
@@ -80,8 +76,8 @@ jobs:
           cat results_table.md >> report.md
           
           echo "### Combined Metrics Plot" >> report.md
-          cml-publish combined_metrics_plot.png --md >> report.md
-          
+          echo "![Combined Metrics Plot](combined_metrics_plot.png)" >> report.md
+
           echo "### Best Hyperparameters" >> report.md
           cat optimization_results.yaml >> report.md
         
