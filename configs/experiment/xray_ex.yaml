@@ -1,0 +1,58 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=catdog_ex
+
+defaults:
+  - override /data: xray_data
+  - override /model: timm_classify
+  - override /callbacks: default
+  - override /logger: default
+  - override /trainer: default
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+seed: 42
+
+experiment_name: "xray_classification"
+
+
+# model
+model:
+  _target_: src.models.timm_classifier.TimmClassifier
+  base_model: "convnext_nano"
+  num_classes: 2
+  lr: 1e-3
+  drop_path_rate: 0.1
+  head_init_scale: 1.0
+  weight_decay: 0.0003986462
+
+augmentation:
+  horizontal_flip: true  # Random horizontal flip
+  random_crop: true  # Random crop
+  random_rotation: true  # Random rotation of images
+
+regularization:
+  dropout: 0.1  # Dropout rate (for ConvNeXt)
+  gradient_clipping: 0.5  # Clip gradients at this value to avoid exploding gradients
+
+
+trainer:
+  _target_: lightning.Trainer
+  min_epochs: 1
+  max_epochs: 1
+
+callbacks:
+  # model_checkpoint:
+  #   _target_: lightning.pytorch.callbacks.ModelCheckpoint
+  #   monitor: "val/acc"
+  #   mode: "max"
+  #   save_top_k: 1
+  #   save_last: True
+
+  early_stopping:
+    _target_: lightning.pytorch.callbacks.EarlyStopping
+    monitor: "val/acc"
+    patience: 7
+    mode: "max"

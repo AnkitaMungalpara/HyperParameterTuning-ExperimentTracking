@@ -1,0 +1,24 @@
+_target_: src.models.timm_classifier.TimmClassifier
+
+# Model parameters
+base_model: convnext_tiny_in22ft1k
+num_classes: 2
+pretrained: false
+
+# ConvNeXt specific parameters
+drop_path_rate: 0.1
+head_init_scale: 1.0
+
+# Augmentation parameters
+horizontal_flip: true
+random_crop: true
+random_rotation: true
+
+# Optimizer parameters
+lr: 1e-3
+optimizer: AdamW
+weight_decay: 1e-8
+
+# Scheduler parameters
+scheduler_patience: 3
+scheduler_factor: 0.1

@@ -1,0 +1,55 @@
+# @package _global_
+
+defaults:
+  - override /hydra/sweeper: optuna
+
+# We want to optimize for the highest test accuracy
+optimization_metric: "val/acc_best"
+
+# Override the experiment name
+experiment_name: "xray_convnext_hparam_optimization"
+
+hydra:
+  sweeper:
+    sampler:
+      _target_: optuna.samplers.TPESampler
+      seed: 123
+      n_startup_trials: 5
+    direction: maximize
+    study_name: xray_convnext_hparam_optimization
+    storage: null
+    n_trials: 5
+    n_jobs: 1
+
+    # Define the hyperparameters to optimize
+    params:
+      model.drop_path_rate: interval(0.0, 0.3)
+      model.head_init_scale: interval(0.5, 2.0)
+      model.lr: interval(1e-5, 1e-3)
+      model.weight_decay: interval(1e-8, 1e-3)
+      data.batch_size: choice(32, 64, 128)
+      augmentation.horizontal_flip: choice(true, false)
+      augmentation.random_crop: choice(true, false)
+      augmentation.random_rotation: choice(true, false)
+      regularization.gradient_clipping: interval(0.1, 1.0)
+
+# Other configurations
+data:
+  batch_size: 64
+
+model:
+  base_model: convnext_nano
+  pretrained: False
+  num_classes: 2
+  optimizer: AdamW
+
+trainer:
+  min_epochs: 1
+  max_epochs: 1
+
+callbacks:
+  early_stopping:
+    _target_: lightning.pytorch.callbacks.EarlyStopping
+    monitor: "val/acc"
+    patience: 7
+    mode: "max"
