@@ -71,7 +71,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "# Hyperparameter Optimization Results" >> report.md
-
+          
           echo "### Combined Metrics Plot" >> report.md
           echo "![Combined Metrics Plot](./combined_metrics_plot.png)" >> report.md
 
@@ -86,5 +86,5 @@ jobs:
 
           echo "### Test Accuracy Across Experiments (Epoch-wise)" >> report.md
           echo "![Test Accuracy Plot (Epoch-wise)](./test_accuracy_plot_epoch.png)" >> report.md
-
-          cml comment create --file report.md
+        
+          cml comment create report.md
