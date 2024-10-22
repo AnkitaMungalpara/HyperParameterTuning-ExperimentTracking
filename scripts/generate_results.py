@@ -60,13 +60,28 @@ def generate_results():
     plt.tight_layout()
     plt.savefig('combined_metrics_plot.png')
 
-    # Load and print optimization results
+    # Load and process optimization results
     opt_results_file = latest_run / "optimization_results.yaml"
     if opt_results_file.exists():
         opt_results = load_yaml(opt_results_file)
-        print("Best hyperparameters:")
-        print(yaml.dump(opt_results['best_params'], default_flow_style=False))
-        print(f"Best validation accuracy: {opt_results['best_value']:.4f}")
+        
+        # Create DataFrame for name and best parameters
+        data = {'Parameter': ['name'] + list(opt_results['best_params'].keys()),
+                'Value': [opt_results['name']] + list(opt_results['best_params'].values())}
+        results_df = pd.DataFrame(data)
+
+        # Add best value to the DataFrame
+        results_df = pd.concat([results_df, pd.DataFrame([{'Parameter': 'best_value', 'Value': opt_results['best_value']}])], ignore_index=True)
+
+        # Convert DataFrame to Markdown
+        md_table = tabulate(results_df, headers='keys', tablefmt='pipe', floatfmt='.6f')
+
+        # Save Markdown table to file
+        with open('optimization_results.md', 'w') as f:
+            f.write("# Optimization Results\n\n")
+            f.write(md_table)
+
+        print("Optimization results saved to 'optimization_results.md'")
 
 if __name__ == "__main__":
     generate_results()

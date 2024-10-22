@@ -79,6 +79,6 @@ jobs:
           echo "![Combined Metrics Plot](combined_metrics_plot.png)" >> report.md
 
           echo "### Best Hyperparameters" >> report.md
-          cat optimization_results.yaml >> report.md
+          cat optimization_results.md >> report.md
         
           cml comment create report.md
