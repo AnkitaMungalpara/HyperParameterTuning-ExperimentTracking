@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: python src/train.py --multirun hparam=xray_vit_hparam +trainer.log_every_n_steps=5 hydra.sweeper.n_jobs=4
+    cmd: python src/train.py --multirun hparam=xray_vit_hparam +trainer.log_every_n_steps=1 hydra.sweeper.n_jobs=4
     deps:
     - configs/experiment/xray_ex.yaml
     - src/train.py

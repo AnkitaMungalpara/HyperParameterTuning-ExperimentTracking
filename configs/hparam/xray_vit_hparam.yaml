@@ -27,7 +27,7 @@ hydra:
       model.head_init_scale: interval(0.5, 2.0)
       model.lr: interval(1e-5, 1e-3)
       model.weight_decay: interval(1e-8, 1e-3)
-      data.batch_size: choice(32, 64, 128)
+      data.batch_size: choice(16, 32, 64)
       augmentation.horizontal_flip: choice(true, false)
       augmentation.random_crop: choice(true, false)
       augmentation.random_rotation: choice(true, false)
