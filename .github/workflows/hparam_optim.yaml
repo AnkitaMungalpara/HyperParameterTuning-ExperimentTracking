@@ -14,6 +14,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+      
       - uses: iterative/setup-cml@v2
       
       - name: Install uv
@@ -21,6 +22,10 @@ jobs:
 
       - name: Set up Python 3.12
         run: uv python install 3.12
+
+      - name: Install CML
+        run: |
+          uv run pip install -U dvc[cml]  # Install DVC with CML support
 
       - name: Install dependencies
         env:
@@ -78,10 +83,6 @@ jobs:
           cml-publish combined_metrics_plot.png --md >> report.md
           
           echo "### Best Hyperparameters" >> report.md
-          latest_run=$(ls -td logs/train/multiruns/* | head -n1)
-          cat "$latest_run/optimization_results.yaml" >> report.md
-          
-          echo "### Optimized Training Metrics" >> report.md
-          cat optimized_metrics.md >> report.md
+          cat optimization_results.yaml >> report.md
         
           cml comment create report.md
