@@ -78,6 +78,10 @@ jobs:
           cml-publish combined_metrics_plot.png --md >> report.md
           
           echo "### Best Hyperparameters" >> report.md
-          cat optimization_results.yaml >> report.md
+          latest_run=$(ls -td logs/train/multiruns/* | head -n1)
+          cat "$latest_run/optimization_results.yaml" >> report.md
+          
+          echo "### Optimized Training Metrics" >> report.md
+          cat optimized_metrics.md >> report.md
         
           cml comment create report.md

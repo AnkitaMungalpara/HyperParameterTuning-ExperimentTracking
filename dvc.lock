@@ -15,6 +15,6 @@ stages:
     outs:
     - path: logs
       hash: md5
-      md5: 180c8458bcb0081454ab5a0ea3cadd05.dir
-      size: 85109
-      nfiles: 184
+      md5: b799c30d7945835debfe170c098718a7.dir
+      size: 85284
+      nfiles: 189
