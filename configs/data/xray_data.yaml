@@ -1,4 +1,4 @@
-_target_: src.datamodules.dogbreed.CatDogDataModule
+_target_: src.datamodules.xray.XRayDataModule
 
 data_dir: ${oc.env:PROJECT_ROOT}/data/chest_xray  
 num_workers: 4

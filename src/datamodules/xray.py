@@ -14,7 +14,7 @@ import os
 from PIL import Image
 
 
-class CatDogDataModule(L.LightningDataModule):
+class XRayDataModule(L.LightningDataModule):
     """
     A PyTorch Lightning DataModule for loading and preparing dog breed images
     for training, validation, and testing. This module manages the datasets
