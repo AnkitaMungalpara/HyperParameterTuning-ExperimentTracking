@@ -21,7 +21,6 @@ This project focuses on **Hyperparameter Optimization** for a **CatDog Classific
 
 This repository applies **hyperparameter optimization** techniques. It uses a sample dataset of 100 images per class from the [Chest X-Ray Pneumonia dataset](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia), and integrates cutting-edge ML tools to automate experiment tracking, model training, and reporting.
 
----
 
 ## Tools and Frameworks 🔧
 
