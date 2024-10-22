@@ -19,7 +19,11 @@ def generate_results():
     latest_run = max(log_dir.glob('*'), key=lambda p: p.stat().st_mtime)
 
     data = []
+    test_accuracies_step = {}
+    test_accuracies_epoch = {}
+    
     for exp_dir in latest_run.glob('[0-9]*'):
+        exp_num = exp_dir.name
         hparams_file = exp_dir / "csv" / "version_0" / "hparams.yaml"
         if hparams_file.exists():
             hparams = load_yaml(hparams_file)
@@ -34,15 +38,49 @@ def generate_results():
                 hparams['val_loss'] = val_loss
                 
                 data.append(hparams)
+                
+                # Extract test accuracy for plotting
+                test_acc_step = metrics[['step', 'test/acc']].dropna()
+                test_acc_epoch = metrics[['epoch', 'test/acc']].dropna()
+                if not test_acc_step.empty:
+                    test_accuracies_step[exp_num] = test_acc_step
+                if not test_acc_epoch.empty:
+                    test_accuracies_epoch[exp_num] = test_acc_epoch
 
     df = pd.DataFrame(data)
-    print(df)
     
-    # Generate table
-    table = tabulate(df, headers='keys', tablefmt='pipe', floatfmt='.4f')
-    with open('results_table.md', 'w') as f:
-        f.write(table)
+    # Generate hyperparameters table
+    hparams_table = tabulate(df, headers='keys', tablefmt='pipe', floatfmt='.4f')
+    with open('hyperparameters_table.md', 'w') as f:
+        f.write("# Hyperparameters for Each Experiment\n\n")
+        f.write(hparams_table)
     
+    # Generate test accuracy plot (step-wise)
+    plt.figure(figsize=(10, 6))
+    for exp_num, acc_data in test_accuracies_step.items():
+        plt.plot(acc_data['step'], acc_data['test/acc'], marker='o', label=f'Experiment {exp_num}')
+    
+    plt.title('Test Accuracy Across Experiments (Step-wise)')
+    plt.xlabel('Step')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('test_accuracy_plot_step.png')
+
+    # Generate test accuracy plot (epoch-wise)
+    plt.figure(figsize=(10, 6))
+    for exp_num, acc_data in test_accuracies_epoch.items():
+        plt.plot(acc_data['epoch'], acc_data['test/acc'], marker='o', label=f'Experiment {exp_num}')
+    
+    plt.title('Test Accuracy Across Experiments (Epoch-wise)')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('test_accuracy_plot_epoch.png')
+
     # Generate plot
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
