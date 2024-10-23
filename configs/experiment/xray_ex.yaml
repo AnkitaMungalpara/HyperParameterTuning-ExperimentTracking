@@ -41,7 +41,7 @@ regularization:
 trainer:
   _target_: lightning.Trainer
   min_epochs: 1
-  max_epochs: 5
+  max_epochs: 1
 
 callbacks:
   # model_checkpoint:
