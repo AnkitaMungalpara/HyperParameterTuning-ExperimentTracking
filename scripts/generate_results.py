@@ -52,7 +52,6 @@ def generate_results():
     # Generate hyperparameters table
     hparams_table = tabulate(df, headers='keys', tablefmt='pipe', floatfmt='.4f')
     with open('hyperparameters_table.md', 'w') as f:
-        f.write("# Hyperparameters for Each Experiment\n\n")
         f.write(hparams_table)
     
     # Generate test accuracy plot (step-wise)
@@ -116,7 +115,6 @@ def generate_results():
 
         # Save Markdown table to file
         with open('optimization_results.md', 'w') as f:
-            f.write("# Optimization Results\n\n")
             f.write(md_table)
 
         print("Optimization results saved to 'optimization_results.md'")
