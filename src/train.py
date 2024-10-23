@@ -1,14 +1,13 @@
+import logging
 import os
 from pathlib import Path
-import logging
+from typing import Any, Dict, List
 
 import hydra
-from omegaconf import DictConfig
 import lightning as L
-from lightning.pytorch.loggers import Logger
-from typing import List, Dict, Any
-
 import rootutils
+from lightning.pytorch.loggers import Logger
+from omegaconf import DictConfig
 
 # Setup root directory
 root = rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
@@ -129,9 +128,11 @@ def main(cfg: DictConfig) -> float:
     # Extract and return the optimization metric
     optimization_metric = all_metrics.get(cfg.get("optimization_metric"))
     if optimization_metric is None:
-        log.warning(f"Optimization metric '{cfg.get('optimization_metric')}' not found in metrics. Returning 0.")
+        log.warning(
+            f"Optimization metric '{cfg.get('optimization_metric')}' not found in metrics. Returning 0."
+        )
         return 0.0
-    
+
     return optimization_metric
 
 

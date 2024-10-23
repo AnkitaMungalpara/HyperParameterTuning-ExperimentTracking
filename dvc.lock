@@ -6,7 +6,7 @@ stages:
     deps:
     - path: configs/experiment/xray_ex.yaml
       hash: md5
-      md5: f5fafecf4c1fa42d562d79ea8ea9b033
+      md5: 0e43ae3e087c8e730da6bbfbbdc08baa
       size: 1351
     - path: src/train.py
       hash: md5
@@ -15,6 +15,6 @@ stages:
     outs:
     - path: logs
       hash: md5
-      md5: 71ae824f5bda2fd32a1862b709663395.dir
-      size: 85181
-      nfiles: 189
+      md5: d313c186b54bfce62438dbcfe3e6513c.dir
+      size: 194397
+      nfiles: 374

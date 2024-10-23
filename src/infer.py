@@ -1,15 +1,16 @@
-import random
-from typing import Tuple
-from pathlib import Path
 import logging
+import random
+from pathlib import Path
+from typing import Tuple
+
 import hydra
-from omegaconf import DictConfig
+import matplotlib.pyplot as plt
 import pytorch_lightning as pl
+import rootutils
 import torch
 import torch.nn.functional as F
-import matplotlib.pyplot as plt
+from omegaconf import DictConfig
 
-import rootutils
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 
 # Imports that require root directory setup
@@ -106,44 +107,47 @@ def save_prediction(
 @hydra.main(version_base="1.3", config_path="../configs", config_name="infer")
 def main(cfg: DictConfig) -> None:
     """Main function for inference using Hydra configuration."""
-    
+
     log.info(f"Instantiating model <{cfg.model._target_}>")
     model = hydra.utils.instantiate(cfg.model)
-    
+
     log.info(f"Loading model from checkpoint: {cfg.ckpt_path}")
     # Change this line
     model = type(model).load_from_checkpoint(cfg.ckpt_path)
     # model.to(cfg.trainer.accelerator)
-    
+
     log.info(f"Instantiating datamodule <{cfg.data._target_}>")
     datamodule: pl.LightningDataModule = hydra.utils.instantiate(cfg.data)
-    
+
     # Set up the data module for validation data
     datamodule.setup(stage="test")
     test_dataset = datamodule.test_dataset
-    
+
     # Create output directory
     output_folder = Path(cfg.paths.root_dir) / "predictions"
     output_folder.mkdir(exist_ok=True)
-    
+
     # Get the indices for sampling
     num_samples = min(cfg.num_samples, len(test_dataset))
     sampled_indices = random.sample(range(len(test_dataset)), num_samples)
-    
+
     for idx in sampled_indices:
         img, label_index = test_dataset[idx]
         img_tensor = img.unsqueeze(0).to(model.device)
-        
+
         actual_label = CLASS_LABELS[label_index]
 
         predicted_label, confidence = inference(model, img_tensor)
         print(actual_label, predicted_label)
-        
+
         output_image_path = output_folder / f"sample_{idx}_prediction.png"
-        
-        save_prediction(img, actual_label, predicted_label, confidence, str(output_image_path))
-        
+
+        save_prediction(
+            img, actual_label, predicted_label, confidence, str(output_image_path)
+        )
+
     log.info(f"Predictions saved in {output_folder}")
+
 
 if __name__ == "__main__":
     main()

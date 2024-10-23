@@ -32,6 +32,7 @@ dependencies = [
     "mlflow>=2.17.0",
     "hydra-joblib-launcher>=1.2.0",
     "hydra-optuna-sweeper>=1.2.0",
+    "plotly>=5.24.1",
 ]
 
 [tool.uv.pip]

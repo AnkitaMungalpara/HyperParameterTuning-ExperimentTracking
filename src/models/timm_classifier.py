@@ -7,6 +7,7 @@ from torch import optim
 from torchmetrics import Accuracy, MaxMetric, MeanMetric
 from torchmetrics.classification import Accuracy
 
+
 class TimmClassifier(L.LightningModule):
     def __init__(
         self,
@@ -23,7 +24,7 @@ class TimmClassifier(L.LightningModule):
         horizontal_flip: bool = False,
         random_crop: bool = False,
         random_rotation: bool = False,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self.save_hyperparameters()
@@ -35,7 +36,7 @@ class TimmClassifier(L.LightningModule):
             num_classes=num_classes,
             drop_path_rate=drop_path_rate,
             head_init_scale=head_init_scale,
-            **kwargs
+            **kwargs,
         )
 
         # Define loss function
@@ -67,8 +68,12 @@ class TimmClassifier(L.LightningModule):
         loss, preds, targets = self.model_step(batch)
         self.train_loss(loss)
         self.train_acc(preds, targets)
-        self.log("train/loss", self.train_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("train/acc", self.train_acc, on_step=False, on_epoch=True, prog_bar=True)
+        self.log(
+            "train/loss", self.train_loss, on_step=False, on_epoch=True, prog_bar=True
+        )
+        self.log(
+            "train/acc", self.train_acc, on_step=False, on_epoch=True, prog_bar=True
+        )
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -81,18 +86,24 @@ class TimmClassifier(L.LightningModule):
     def on_validation_epoch_end(self):
         acc = self.val_acc.compute()
         self.val_acc_best(acc)
-        self.log("val/acc_best", self.val_acc_best.compute(), on_epoch=True, prog_bar=True)
+        self.log(
+            "val/acc_best", self.val_acc_best.compute(), on_epoch=True, prog_bar=True
+        )
 
     def test_step(self, batch, batch_idx):
         loss, preds, targets = self.model_step(batch)
         self.test_loss(loss)
         self.test_acc(preds, targets)
-        self.log("test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True)
+        self.log(
+            "test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True
+        )
         self.log("test/acc", self.test_acc, on_step=False, on_epoch=True, prog_bar=True)
 
     def on_test_epoch_end(self):
         self.test_acc_best(self.test_acc.compute())
-        self.log("test/acc_best", self.test_acc_best.compute(), on_epoch=True, prog_bar=True)
+        self.log(
+            "test/acc_best", self.test_acc_best.compute(), on_epoch=True, prog_bar=True
+        )
 
     def configure_optimizers(self):
         optimizer_class = getattr(optim, self.hparams.optimizer)
@@ -101,9 +112,9 @@ class TimmClassifier(L.LightningModule):
             lr=self.hparams.lr,
             weight_decay=self.hparams.weight_decay,
             betas=(0.9, 0.999),
-            eps=1e-8
+            eps=1e-8,
         )
-        
+
         scheduler = optim.lr_scheduler.ReduceLROnPlateau(
             optimizer,
             mode="min",
@@ -115,5 +126,9 @@ class TimmClassifier(L.LightningModule):
 
         return {
             "optimizer": optimizer,
-            "lr_scheduler": {"scheduler": scheduler, "monitor": "val/loss", "interval": "epoch"},
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "monitor": "val/loss",
+                "interval": "epoch",
+            },
         }
