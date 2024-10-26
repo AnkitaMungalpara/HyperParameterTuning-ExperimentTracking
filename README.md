@@ -1,3 +1,5 @@
+[![Hyperparameter Optimization and Report](https://github.com/AnkitaMungalpara/HyperParameterTuning-ExperimentTracking/actions/workflows/hparam_optim.yaml/badge.svg)](https://github.com/AnkitaMungalpara/HyperParameterTuning-ExperimentTracking/actions/workflows/hparam_optim.yaml)
+
 # Hyperparameter Optimization and Report 🎯
 
 This project focuses on **Hyperparameter Optimization** for a **CatDog Classification** model, leveraging powerful tools like **Aim**, **MLflow**, **DVC**, **CML**, **Hydra**, and **Optuna**. It demonstrates how to streamline experiment tracking, model tuning, and reporting with modern ML tools.
@@ -129,6 +131,7 @@ This repository applies **hyperparameter optimization** techniques. It uses a sa
    ```bash
    python src/train.py --multirun hparam=catdog_vit_hparam +trainer.log_every_n_steps=5 hydra.sweeper.n_jobs=4
    ```
+
 
 ## **References** 📚
 
