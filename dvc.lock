@@ -2,19 +2,19 @@ schema: '2.0'
 stages:
   train:
     cmd: python src/train.py --multirun hparam=xray_vit_hparam +trainer.log_every_n_steps=1
-      hydra.sweeper.n_jobs=4
+      hydra.sweeper.n_jobs=2
     deps:
     - path: configs/experiment/xray_ex.yaml
       hash: md5
-      md5: 0e43ae3e087c8e730da6bbfbbdc08baa
-      size: 1351
+      md5: e92c1b6ccf2c9df6309f978ceac15a98
+      size: 1352
     - path: src/train.py
       hash: md5
-      md5: ef33672610ac0f04053016dad82e33ba
-      size: 4107
+      md5: 3ebee6736c3b7531742ac21c90a5222f
+      size: 4124
     outs:
     - path: logs
       hash: md5
-      md5: d313c186b54bfce62438dbcfe3e6513c.dir
-      size: 194397
-      nfiles: 374
+      md5: 7a4d6b567918131529618a0cd43a879b.dir
+      size: 665841
+      nfiles: 1114
