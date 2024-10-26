@@ -132,6 +132,7 @@ This repository applies **hyperparameter optimization** techniques. It uses a sa
    python src/train.py --multirun hparam=catdog_vit_hparam +trainer.log_every_n_steps=5 hydra.sweeper.n_jobs=4
    ```
 
+[View the report](report.md)
 
 ## **References** 📚
 
